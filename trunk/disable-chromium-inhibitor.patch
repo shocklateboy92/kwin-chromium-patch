@@ -1,0 +1,14 @@
+diff --git a/src/wayland_server.cpp b/src/wayland_server.cpp
+index 2b3182e27..5b1d21feb 100644
+--- a/src/wayland_server.cpp
++++ b/src/wayland_server.cpp
+@@ -745,6 +745,9 @@ bool WaylandServer::isKeyboardShortcutsInhibited() const
+ {
+     auto surface = seat()->focusedKeyboardSurface();
+     if (surface) {
++        if (surface->client()->executablePath().endsWith("chromium")) {
++            return false;
++        }
+         auto inhibitor = keyboardShortcutsInhibitManager()->findInhibitor(surface, seat());
+         return inhibitor && inhibitor->isActive();
+     }

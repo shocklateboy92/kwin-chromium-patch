@@ -15,7 +15,8 @@ makedepends=(extra-cmake-modules qt5-tools kdoctools krunner wayland-protocols p
 optdepends=('maliit-keyboard: virtual keyboard for kwin-wayland')
 replaces=(kwayland-server)
 groups=(plasma)
-source=(https://download.kde.org/stable/plasma/$pkgver/$pkgname-$pkgver.tar.xz{,.sig})
+source=(https://download.kde.org/stable/plasma/$pkgver/$pkgname-$pkgver.tar.xz{,.sig}
+        disable-chromium-inhibitor.patch)
 install=$pkgname.install
 sha256sums=('13e0818ffc2a9b2038a9638b0413c14070be6d86abfcf6b8d188263d4a011bd8'
             'SKIP')
@@ -24,6 +25,14 @@ validpgpkeys=('E0A3EB202F8E57528E13E72FD7574483BB57B18D'  # Jonathan Esk-Riddell
               'D07BD8662C56CB291B316EB2F5675605C74E02CF'  # David Edmundson <davidedmundson@kde.org>
               '1FA881591C26B276D7A5518EEAAF29B42A678C20') # Marco Martin <notmart@gmail.com>
 options=(debug)
+
+prepare() {
+  patch \
+    --directory="$pkgname-$pkgver" \
+    --forward \
+    --strip=1 \
+    --input="${srcdir}/disable-chromium-inhibitor.patch"
+}
 
 build() {
   cmake -B build -S $pkgname-$pkgver \
